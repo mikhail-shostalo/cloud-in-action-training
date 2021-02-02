@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+
+  server:
+    build: cloud-server
+    image: myapp/cloud-server
+    ports: 
+      - 8080:8080
