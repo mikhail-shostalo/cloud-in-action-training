@@ -1,3 +1,1 @@
-cd cloud-server
-./gradlew clean build
-cd -
+./cloud-server/gradlew clean build -b cloud-server/build.gradle

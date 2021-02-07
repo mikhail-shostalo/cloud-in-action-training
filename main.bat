@@ -1,0 +1,1 @@
+./cloud-server/gradlew.bat clean build -b cloud-server/build.gradle
