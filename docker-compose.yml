@@ -4,6 +4,6 @@ services:
 
   server:
     build: cloud-server
-    image: myapp/cloud-server
+    image: 052162585373.dkr.ecr.us-east-1.amazonaws.com/cloud-server
     ports: 
       - 80:8080
