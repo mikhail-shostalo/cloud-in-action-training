@@ -24,6 +24,7 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
     dockerComposeFile: docker-compose.yml
+    additionalImageTags: $(Build.SourceVersion)
 
 - task: DockerCompose@0
   displayName: Push services
@@ -32,4 +33,4 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
     dockerComposeFile: docker-compose.yml
-    additionalImageTags: $(Build.BuildId)
+    additionalImageTags: $(Build.SourceVersion)
