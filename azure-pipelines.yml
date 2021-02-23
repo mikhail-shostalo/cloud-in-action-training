@@ -7,7 +7,7 @@ pool:
 steps:
 - task: Gradle@2
   inputs:
-    workingDirectory: '/cloud-server'
+    cwd: '/cloud-server'
     gradleWrapperFile: 'gradlew'
     gradleOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
