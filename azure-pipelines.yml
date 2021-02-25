@@ -55,6 +55,6 @@ stages:
         appType: webAppContainer
         ConnectedServiceName: $(azureSubscriptionEndpoint)
         WebAppName: $(WebAppName)
-        DockerNamespace: $(DockerNamespace)
+        DockerNamespace: $(azureContainerRegistry)
         DockerRepository: $(DockerRepository)
         DockerImageTag: $(Build.SourceVersion)
