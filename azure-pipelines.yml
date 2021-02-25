@@ -49,12 +49,9 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: AzureRMWebAppDeployment@4
-      displayName: Azure App Service Deploy
+    - task: AzureWebAppContainer@1
+      displayName: Azure Web App on Container Deploy
       inputs:
-        appType: webAppContainer
-        ConnectedServiceName: $(azureSubscriptionEndpoint)
-        WebAppName: $(WebAppName)
-        DockerNamespace: $(azureContainerRegistry)
-        DockerRepository: $(DockerRepository)
-        DockerImageTag: $(Build.SourceVersion)
+        appName: $(WebAppName)
+        azureSubscription: $(azureSubscription)
+        imageName: $(azureContainerRegistry)/$(DockerRepository):$(Build.SourceVersion)
