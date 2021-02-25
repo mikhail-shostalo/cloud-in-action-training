@@ -53,5 +53,5 @@ stages:
       displayName: Azure Web App on Container Deploy
       inputs:
         appName: $(WebAppName)
-        azureSubscription: $(azureSubscription)
+        azureSubscription: $(azureSubscriptionEndpoint)
         imageName: $(azureContainerRegistry)/$(DockerRepository):$(Build.SourceVersion)
