@@ -6,33 +6,55 @@ pr: none
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: Gradle@2
-  inputs:
-    cwd: 'cloud-server'
-    gradleWrapperFile: 'cloud-server/gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'build test'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Gradle@2
+      inputs:
+        cwd: 'cloud-server'
+        gradleWrapperFile: 'cloud-server/gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'build test'
 
-- task: DockerCompose@0
-  displayName: Build services
-  inputs:
-    action: Build services
-    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    azureContainerRegistry: $(azureContainerRegistry)
-    dockerComposeFile: docker-compose.yml
-    additionalImageTags: $(Build.SourceVersion)
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        action: Build services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: docker-compose.yml
+        additionalImageTags: $(Build.SourceVersion)
 
-- task: DockerCompose@0
-  displayName: Push services
-  inputs:
-    action: Push services
-    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    azureContainerRegistry: $(azureContainerRegistry)
-    dockerComposeFile: docker-compose.yml
-    additionalImageTags: $(Build.SourceVersion)
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        action: Push services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: docker-compose.yml
+        additionalImageTags: $(Build.SourceVersion)
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureRMWebAppDeployment@4
+      displayName: Azure App Service Deploy
+      inputs:
+        appType: webAppContainer
+        ConnectedServiceName: $(azureSubscriptionEndpoint)
+        WebAppName: $(WebAppName)
+        DockerNamespace: $(DockerNamespace)
+        DockerRepository: $(DockerRepository)
+        DockerImageTag: $(Build.SourceVersion)
