@@ -14,8 +14,12 @@ repositories {
 
 dependencies {
 	compile 'org.springdoc:springdoc-openapi-ui:1.5.3'
+	compile 'mysql:mysql-connector-java'
+	compile 'org.flywaydb:flyway-core:5.2.4'
+	implementation 'org.jeasy:easy-random-core:4.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
