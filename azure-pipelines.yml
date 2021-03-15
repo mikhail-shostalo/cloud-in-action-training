@@ -13,16 +13,16 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: MysqlDeploymentOnMachineGroup@1
-      displayName: 'Deploy Using : InlineSqlTask'
+    - task: AzureMysqlDeployment@1
+      displayName: 'Execute Azure MySQL : InlineSqlTask'
       inputs:
+        ConnectedServiceName: $(ConnectedServiceName)
+        ServerName: $(ServerName)
+        DatabaseName: testDb
+        SqlUsername: $(SqlUserName)
+        SqlPassword: $(SqlPassword)
         TaskNameSelector: InlineSqlTask
-        SqlInline: |
-          CREATE DATABASE IF NOT EXISTS testDb;
-          use testDb;
-        ServerName: localhost
-        SqlUsername: user
-        SqlPassword: testDb
+        SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
