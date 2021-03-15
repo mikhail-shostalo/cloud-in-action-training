@@ -13,6 +13,16 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: MysqlDeploymentOnMachineGroup@1
+      displayName: 'Deploy Using : InlineSqlTask'
+      inputs:
+        TaskNameSelector: InlineSqlTask
+        SqlInline: |
+          CREATE DATABASE IF NOT EXISTS testDb;
+          use testDb;
+        ServerName: localhost
+        SqlUsername: user
+        SqlPassword: testDb
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
