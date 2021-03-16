@@ -22,7 +22,7 @@ stages:
         SqlUsername: $(SqlUserName)
         SqlPassword: $(SqlPassword)
         TaskNameSelector: InlineSqlTask
-        SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
+        SqlInline: SHOW $(DataBaseName).TABLES;
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
