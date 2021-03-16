@@ -4,10 +4,10 @@ services:
 
   db:
     image: mysql:5.7
-    container_name: $ServerName
+    container_name: $(ServerName)
     environment:
-      - MYSQL_ROOT_PASSWORD=$SqlPassword
-      - MYSQL_USER=$SqlUserName
+      - MYSQL_ROOT_PASSWORD=$(SqlPassword)
+      - MYSQL_USER=$(SqlUserName)
     ports:
       - 3306:3306
     restart: always
@@ -21,6 +21,6 @@ services:
       - db
     restart: always
     environment:
-      spring.datasource.url: jdbc:mysql://$ServerName:3306/testDb?createDatabaseIfNotExist=true&useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
-      spring.datasource.username: $SqlUserName
-      spring.datasource.password: $SqlPassword
+      spring.datasource.url: jdbc:mysql://$(ServerName):3306/testDb?createDatabaseIfNotExist=true&useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+      spring.datasource.username: $(SqlUserName)
+      spring.datasource.password: $(SqlPassword)
