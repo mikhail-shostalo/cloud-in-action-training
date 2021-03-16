@@ -13,6 +13,13 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          export SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+          export SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+          export SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
     - task: AzureMysqlDeployment@1
       displayName: 'Execute Azure MySQL : InlineSqlTask'
       inputs:
