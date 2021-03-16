@@ -22,7 +22,6 @@ stages:
         SqlUsername: $(SqlUserName)
         SqlPassword: $(SqlPassword)
         TaskNameSelector: InlineSqlTask
-        SqlInline: SHOW $(DataBaseName).TABLES;
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
