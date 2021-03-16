@@ -60,6 +60,10 @@ stages:
         azureContainerRegistry: $(azureContainerRegistry)
         dockerComposeFile: docker-compose.yml
         additionalImageTags: $(Build.SourceVersion)
+        dockerComposeFileArgs: |
+          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
 
 - stage: Deploy
   jobs:
