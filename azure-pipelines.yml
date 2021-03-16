@@ -28,10 +28,7 @@ stages:
         cwd: 'cloud-server'
         gradleWrapperFile: 'cloud-server/gradlew'
         gradleOptions: '-Xmx3072m -D'
-        options: |
-          --spring.datasource.url=$(connectionDataBaseString)
-          --spring.datasource.username=$(SqlUserName)
-          --spring.datasource.password=$(SqlPassword)
+        options: '-Dspring.datasource.url=$(connectionDataBaseString) -Dspring.datasource.username=$(SqlUserName) -Dspring.datasource.password=$(SqlPassword)'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.11'
         jdkArchitectureOption: 'x64'
