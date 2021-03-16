@@ -43,6 +43,10 @@ stages:
         azureContainerRegistry: $(azureContainerRegistry)
         dockerComposeFile: docker-compose.yml
         additionalImageTags: $(Build.SourceVersion)
+        dockerComposeFileArgs: |
+          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
 
     - task: DockerCompose@0
       displayName: Push services
