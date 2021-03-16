@@ -24,9 +24,9 @@ stages:
         TaskNameSelector: InlineSqlTask
         SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
     - bash: |
-      export SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-      export SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-      export SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
+        export SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+        export SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+        export SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
