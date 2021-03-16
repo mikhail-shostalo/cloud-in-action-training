@@ -16,9 +16,9 @@ stages:
     - task: AzureMysqlDeployment@1
       displayName: 'Execute Azure MySQL : InlineSqlTask'
       inputs:
-        ConnectedServiceName: $(ConnectedServiceName)
+        ConnectedServiceName: $(azureSubscriptionEndpoint)
         ServerName: $(ServerName)
-        DatabaseName: testDb
+        DatabaseName: $(DataBaseName)
         SqlUsername: $(SqlUserName)
         SqlPassword: $(SqlPassword)
         TaskNameSelector: InlineSqlTask
