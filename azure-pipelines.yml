@@ -23,10 +23,6 @@ stages:
         SqlPassword: $(SqlPassword)
         TaskNameSelector: InlineSqlTask
         SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
-    - bash: |
-        export SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-        export SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-        export SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
     - task: Gradle@2
       inputs:
         cwd: 'cloud-server'
@@ -38,6 +34,10 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build test'
+      var:
+        SPRING_DATASOURCE_URL: $(connectionDataBaseString)
+        SPRING_DATASOURCE_USERNAME: $(SqlUserName)
+        SPRING_DATASOURCE_PASSWORD: $(SqlPassword)
 
     - task: DockerCompose@0
       displayName: Build services
