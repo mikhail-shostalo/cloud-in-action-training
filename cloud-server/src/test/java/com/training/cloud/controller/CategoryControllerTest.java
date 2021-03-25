@@ -6,13 +6,12 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.training.cloud.entity.Category;
-import com.training.cloud.service.CategoryService;
-import com.training.cloud.service.ProductService;
+import com.training.cloud.category.entity.Category;
+import com.training.cloud.category.service.CategoryService;
+import com.training.cloud.product.entity.Product;
+import com.training.cloud.product.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,10 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
-public class CategoryControllerTest {
+public class CategoryControllerTest extends AbstractControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,6 +64,23 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk());
 
         assertThat(categoryService.findByCode(category.getCode()).getName()).isEqualTo(name);
+    }
+
+    @Test
+    public void shouldReturnProductsForCategory() throws Exception {
+        final Product product = productService.save(easyRandomInstance().nextObject(Product.class));
+        final Category category = easyRandomInstance().nextObject(Category.class);
+        category.addProduct(product);
+        categoryService.save(category);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/categories/" + category.getCode() + "/products"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        final List<Product> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+        assertThat(result).map(Product::getCode)
+                .contains(product.getCode());
     }
 
     @Test
@@ -125,8 +139,7 @@ public class CategoryControllerTest {
 
         final List<Category> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
         });
-        assertThat(result).map(category -> category.getName().toLowerCase())
-                .isSortedAccordingTo(Comparator.naturalOrder());
+        assertThat(result).map(Category::getName).isSortedAccordingTo(Comparator.naturalOrder());
     }
 
     @Test
@@ -140,8 +153,7 @@ public class CategoryControllerTest {
 
         final List<Category> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
         });
-        assertThat(result).map(category -> category.getName().toLowerCase())
-                .isSortedAccordingTo(Comparator.reverseOrder());
+        assertThat(result).map(Category::getName).isSortedAccordingTo(Comparator.reverseOrder());
     }
 
     private List<Category> randomizeCategories() {

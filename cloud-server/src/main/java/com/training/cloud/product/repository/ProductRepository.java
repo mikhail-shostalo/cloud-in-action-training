@@ -1,6 +1,6 @@
-package com.training.cloud.repository;
+package com.training.cloud.product.repository;
 
-import com.training.cloud.entity.Product;
+import com.training.cloud.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

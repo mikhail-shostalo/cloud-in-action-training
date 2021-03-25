@@ -1,4 +1,4 @@
-package com.training.cloud.controller;
+package com.training.cloud.application.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

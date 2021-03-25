@@ -1,4 +1,4 @@
-package com.training.cloud.entity;
+package com.training.cloud.category.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.training.cloud.product.entity.Product;
 
 @Entity
 @Table(name = "categories")

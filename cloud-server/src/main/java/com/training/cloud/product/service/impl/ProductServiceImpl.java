@@ -1,15 +1,15 @@
-package com.training.cloud.service.impl;
+package com.training.cloud.product.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.training.cloud.data.ProductFilterData;
-import com.training.cloud.entity.Category;
-import com.training.cloud.entity.Product;
-import com.training.cloud.repository.CategoryRepository;
-import com.training.cloud.repository.ProductRepository;
-import com.training.cloud.service.ProductService;
-import com.training.cloud.specification.ProductSpecification;
-import com.training.cloud.util.SortUtil;
+import com.training.cloud.product.data.ProductFilterData;
+import com.training.cloud.category.entity.Category;
+import com.training.cloud.product.entity.Product;
+import com.training.cloud.category.repository.CategoryRepository;
+import com.training.cloud.product.repository.ProductRepository;
+import com.training.cloud.product.service.ProductService;
+import com.training.cloud.product.specification.ProductSpecification;
+import com.training.cloud.application.util.SortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,12 +27,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductByCode(String code) {
         return productRepository.findByCode(code);
-    }
-
-    @Override
-    public List<Product> findAllProductsForCategory(String categoryCode) {
-        final Category category = categoryRepository.findByCode(categoryCode);
-        return new ArrayList<>(category.getProducts());
     }
 
     @Override

@@ -8,14 +8,10 @@ import java.util.stream.IntStream;
 import javax.transaction.Transactional;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.training.cloud.entity.Category;
-import com.training.cloud.entity.Product;
-import com.training.cloud.service.CategoryService;
-import com.training.cloud.service.ProductService;
+import com.training.cloud.product.entity.Product;
+import com.training.cloud.product.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,19 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
-public class ProductControllerTest {
+public class ProductControllerTest extends AbstractControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private CategoryService categoryService;
 
     @Test
     public void shouldCreateNewProduct() throws Exception {
@@ -183,8 +174,7 @@ public class ProductControllerTest {
 
         final List<Product> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
         });
-        assertThat(result).map(product -> product.getName().toLowerCase())
-                .isSortedAccordingTo(Comparator.naturalOrder());
+        assertThat(result).map(Product::getName).isSortedAccordingTo(Comparator.naturalOrder());
     }
 
     @Test
@@ -199,25 +189,7 @@ public class ProductControllerTest {
 
         final List<Product> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
         });
-        assertThat(result).map(product -> product.getName().toLowerCase())
-                .isSortedAccordingTo(Comparator.reverseOrder());
-    }
-
-    @Test
-    public void shouldReturnProductsForCategory() throws Exception {
-        final Product product = productService.save(easyRandomInstance().nextObject(Product.class));
-        final Category category = easyRandomInstance().nextObject(Category.class);
-        category.addProduct(product);
-        categoryService.save(category);
-
-        MockHttpServletResponse response = mockMvc.perform(get("/products/category/" + category.getCode()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse();
-
-        final List<Product> result = new ObjectMapper().readValue(response.getContentAsString(), new TypeReference<>() {
-        });
-        assertThat(result).map(Product::getCode)
-                .contains(product.getCode());
+        assertThat(result).map(Product::getName).isSortedAccordingTo(Comparator.reverseOrder());
     }
 
     @Test

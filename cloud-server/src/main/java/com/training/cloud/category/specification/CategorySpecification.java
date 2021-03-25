@@ -1,6 +1,6 @@
-package com.training.cloud.specification;
+package com.training.cloud.category.specification;
 
-import com.training.cloud.entity.Category;
+import com.training.cloud.category.entity.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 

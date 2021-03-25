@@ -1,10 +1,10 @@
-package com.training.cloud.controller;
+package com.training.cloud.product.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
-import com.training.cloud.data.ProductFilterData;
-import com.training.cloud.entity.Product;
-import com.training.cloud.service.ProductService;
+import com.training.cloud.product.data.ProductFilterData;
+import com.training.cloud.product.entity.Product;
+import com.training.cloud.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,11 +33,6 @@ public class ProductController {
                                                         @RequestParam(required = false) final String sort) {
         final ProductFilterData productFilterData = createProductFilterData(name, priceFrom, priceTo, sort);
         return new ResponseEntity<>(productService.findAllProducts(productFilterData), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/category/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> findAllProductsForCategory(@PathVariable String code) {
-        return new ResponseEntity<>(productService.findAllProductsForCategory(code), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,4 +1,4 @@
-package com.training.cloud.util;
+package com.training.cloud.application.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;

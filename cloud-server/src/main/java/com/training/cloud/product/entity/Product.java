@@ -1,4 +1,4 @@
-package com.training.cloud.entity;
+package com.training.cloud.product.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.training.cloud.category.entity.Category;
 
 @Entity
 @Table(name = "products")

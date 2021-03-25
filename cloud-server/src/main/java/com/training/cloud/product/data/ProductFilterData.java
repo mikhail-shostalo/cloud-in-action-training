@@ -1,4 +1,4 @@
-package com.training.cloud.data;
+package com.training.cloud.product.data;
 
 import java.math.BigDecimal;
 

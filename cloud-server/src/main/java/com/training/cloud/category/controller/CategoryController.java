@@ -1,9 +1,10 @@
-package com.training.cloud.controller;
+package com.training.cloud.category.controller;
 
 import java.util.List;
-import com.training.cloud.data.CategoryFilterData;
-import com.training.cloud.entity.Category;
-import com.training.cloud.service.CategoryService;
+import com.training.cloud.category.data.CategoryFilterData;
+import com.training.cloud.category.entity.Category;
+import com.training.cloud.category.service.CategoryService;
+import com.training.cloud.product.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +38,11 @@ public class CategoryController {
         categoryFilterData.setName(name);
         categoryFilterData.setSort(sort);
         return categoryFilterData;
+    }
+
+    @GetMapping(value = "/{code}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Product>> findAllProductsForCategory(@PathVariable String code) {
+        return new ResponseEntity<>(categoryService.findAllProductsForCategory(code), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

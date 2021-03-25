@@ -1,14 +1,12 @@
-package com.training.cloud.service;
+package com.training.cloud.product.service;
 
 import java.util.List;
-import com.training.cloud.data.ProductFilterData;
-import com.training.cloud.entity.Product;
+import com.training.cloud.product.data.ProductFilterData;
+import com.training.cloud.product.entity.Product;
 
 public interface ProductService {
 
     Product findProductByCode(String code);
-
-    List<Product> findAllProductsForCategory(String categoryCode);
 
     Product save(Product product);
 

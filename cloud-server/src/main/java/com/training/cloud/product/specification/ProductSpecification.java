@@ -1,9 +1,9 @@
-package com.training.cloud.specification;
+package com.training.cloud.product.specification;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.criteria.Path;
-import com.training.cloud.entity.Product;
+import com.training.cloud.product.entity.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 

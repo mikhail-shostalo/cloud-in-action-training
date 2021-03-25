@@ -13,21 +13,21 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: AzureMysqlDeployment@1
-      displayName: 'Execute Azure MySQL : InlineSqlTask'
-      inputs:
-        ConnectedServiceName: $(azureSubscriptionEndpoint)
-        ServerName: $(ServerName)
-        DatabaseName: $(DataBaseName)
-        SqlUsername: $(SqlUserName)
-        SqlPassword: $(SqlPassword)
-        TaskNameSelector: InlineSqlTask
-        SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
+#    - task: AzureMysqlDeployment@1
+#      displayName: 'Execute Azure MySQL : InlineSqlTask'
+#      inputs:
+#        ConnectedServiceName: $(azureSubscriptionEndpoint)
+#        ServerName: $(ServerName)
+#        DatabaseName: $(DataBaseName)
+#        SqlUsername: $(SqlUserName)
+#        SqlPassword: $(SqlPassword)
+#        TaskNameSelector: InlineSqlTask
+#        SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
     - task: Gradle@2
-      env:
-        SPRING_DATASOURCE_URL: $(connectionDataBaseString)
-        SPRING_DATASOURCE_USERNAME: $(SqlUserName)
-        SPRING_DATASOURCE_PASSWORD: $(SqlPassword)
+#      env:
+#        SPRING_DATASOURCE_URL: $(connectionDataBaseString)
+#        SPRING_DATASOURCE_USERNAME: $(SqlUserName)
+#        SPRING_DATASOURCE_PASSWORD: $(SqlPassword)
       inputs:
         cwd: 'cloud-server'
         gradleWrapperFile: 'cloud-server/gradlew'
@@ -47,10 +47,10 @@ stages:
         azureContainerRegistry: $(azureContainerRegistry)
         dockerComposeFile: docker-compose.yml
         additionalImageTags: $(Build.SourceVersion)
-        dockerComposeFileArgs: |
-          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
+#        dockerComposeFileArgs: |
+#          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+#          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+#          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
 
     - task: DockerCompose@0
       displayName: Push services
@@ -60,10 +60,10 @@ stages:
         azureContainerRegistry: $(azureContainerRegistry)
         dockerComposeFile: docker-compose.yml
         additionalImageTags: $(Build.SourceVersion)
-        dockerComposeFileArgs: |
-          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
+#        dockerComposeFileArgs: |
+#          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
+#          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
+#          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
 
 - stage: Deploy
   jobs:
