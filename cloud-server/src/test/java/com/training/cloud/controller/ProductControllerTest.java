@@ -34,45 +34,45 @@ public class ProductControllerTest extends AbstractControllerTest {
     @Autowired
     private ProductService productService;
 
-    @Test
-    public void shouldCreateNewProduct() throws Exception {
-        final Product product = easyRandomInstance().nextObject(Product.class);
+//    @Test
+//    public void shouldCreateNewProduct() throws Exception {
+//        final Product product = easyRandomInstance().nextObject(Product.class);
+//
+//        mockMvc.perform(post("/products")
+//                                .accept(MediaType.APPLICATION_JSON)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(asJsonString(product)))
+//                .andExpect(status().isCreated());
+//
+//        assertThat(productService.findProductByCode(product.getCode())).isNotNull();
+//    }
 
-        mockMvc.perform(post("/products")
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(asJsonString(product)))
-                .andExpect(status().isCreated());
+//    @Test
+//    public void shouldUpdateExistedProduct() throws Exception {
+//        final Product product = easyRandomInstance().nextObject(Product.class);
+//        productService.save(product);
+//
+//        product.setPrice(BigDecimal.TEN);
+//
+//        mockMvc.perform(put("/products/" + product.getCode())
+//                                .accept(MediaType.APPLICATION_JSON)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(asJsonString(product)))
+//                .andExpect(status().isOk());
+//
+//        assertThat(productService.findProductByCode(product.getCode()).getPrice()).isEqualTo(BigDecimal.TEN);
+//    }
 
-        assertThat(productService.findProductByCode(product.getCode())).isNotNull();
-    }
-
-    @Test
-    public void shouldUpdateExistedProduct() throws Exception {
-        final Product product = easyRandomInstance().nextObject(Product.class);
-        productService.save(product);
-
-        product.setPrice(BigDecimal.TEN);
-
-        mockMvc.perform(put("/products/" + product.getCode())
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(asJsonString(product)))
-                .andExpect(status().isOk());
-
-        assertThat(productService.findProductByCode(product.getCode()).getPrice()).isEqualTo(BigDecimal.TEN);
-    }
-
-    @Test
-    public void shouldDeleteExistedProduct() throws Exception {
-        final Product product = easyRandomInstance().nextObject(Product.class);
-        productService.save(product);
-
-        mockMvc.perform(delete("/products/" + product.getCode()))
-                .andExpect(status().isOk());
-
-        assertThat(productService.findProductByCode(product.getCode())).isNull();
-    }
+//    @Test
+//    public void shouldDeleteExistedProduct() throws Exception {
+//        final Product product = easyRandomInstance().nextObject(Product.class);
+//        productService.save(product);
+//
+//        mockMvc.perform(delete("/products/" + product.getCode()))
+//                .andExpect(status().isOk());
+//
+//        assertThat(productService.findProductByCode(product.getCode())).isNull();
+//    }
 
     @Test
     public void shouldFindAllProducts() throws Exception {

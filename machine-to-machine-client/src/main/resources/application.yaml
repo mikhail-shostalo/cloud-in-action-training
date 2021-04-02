@@ -1,0 +1,15 @@
+cloud-server:
+  base-url: http://localhost:8080
+
+server:
+  port: 8081
+
+azure:
+  activedirectory:
+    tenant-id: f1faa832-4181-4713-8eee-9b29f2eec606
+    client-id: d6a95055-bacb-4dce-b1cf-71bcf1de8d16
+    client-secret: i~~EB2LBB-sK27E~bmnH0p7~N_Y9GTUV6_
+    authorization-clients:
+      graph:
+        scopes:
+          - api://d6a95055-bacb-4dce-b1cf-71bcf1de8d16/User.Read
