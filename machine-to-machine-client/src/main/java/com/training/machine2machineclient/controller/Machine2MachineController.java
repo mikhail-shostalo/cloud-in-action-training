@@ -1,5 +1,7 @@
 package com.training.machine2machineclient.controller;
 
+import reactor.core.publisher.Mono;
+
 import java.util.List;
 import com.training.machine2machineclient.dto.CategoryDto;
 import com.training.machine2machineclient.dto.ProductDto;
@@ -8,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -36,6 +40,14 @@ public class Machine2MachineController {
                 .bodyToFlux(CategoryDto.class)
                 .collectList().block();
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/products/{code}")
+    public ResponseEntity<Object> deleteProduct(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient, @PathVariable String code) {
+        return webClient.delete().uri("/products/" + code)
+                .attributes(oauth2AuthorizedClient(authorizedClient))
+                .exchangeToMono(clientResponse -> Mono.just(new ResponseEntity<>(clientResponse.statusCode())))
+                .block();
     }
 
     private WebClient.ResponseSpec createResponseSpec(final String url, OAuth2AuthorizedClient authorizedClient) {

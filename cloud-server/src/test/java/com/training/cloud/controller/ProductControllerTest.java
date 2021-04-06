@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 import javax.transaction.Transactional;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.training.cloud.context.annatation.WithScope;
 import com.training.cloud.product.entity.Product;
 import com.training.cloud.product.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -34,45 +35,48 @@ public class ProductControllerTest extends AbstractControllerTest {
     @Autowired
     private ProductService productService;
 
-//    @Test
-//    public void shouldCreateNewProduct() throws Exception {
-//        final Product product = easyRandomInstance().nextObject(Product.class);
-//
-//        mockMvc.perform(post("/products")
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(asJsonString(product)))
-//                .andExpect(status().isCreated());
-//
-//        assertThat(productService.findProductByCode(product.getCode())).isNotNull();
-//    }
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldCreateNewProduct() throws Exception {
+        final Product product = easyRandomInstance().nextObject(Product.class);
 
-//    @Test
-//    public void shouldUpdateExistedProduct() throws Exception {
-//        final Product product = easyRandomInstance().nextObject(Product.class);
-//        productService.save(product);
-//
-//        product.setPrice(BigDecimal.TEN);
-//
-//        mockMvc.perform(put("/products/" + product.getCode())
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(asJsonString(product)))
-//                .andExpect(status().isOk());
-//
-//        assertThat(productService.findProductByCode(product.getCode()).getPrice()).isEqualTo(BigDecimal.TEN);
-//    }
+        mockMvc.perform(post("/products")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(product)))
+                .andExpect(status().isCreated());
 
-//    @Test
-//    public void shouldDeleteExistedProduct() throws Exception {
-//        final Product product = easyRandomInstance().nextObject(Product.class);
-//        productService.save(product);
-//
-//        mockMvc.perform(delete("/products/" + product.getCode()))
-//                .andExpect(status().isOk());
-//
-//        assertThat(productService.findProductByCode(product.getCode())).isNull();
-//    }
+        assertThat(productService.findProductByCode(product.getCode())).isNotNull();
+    }
+
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldUpdateExistedProduct() throws Exception {
+        final Product product = easyRandomInstance().nextObject(Product.class);
+        productService.save(product);
+
+        product.setPrice(BigDecimal.TEN);
+
+        mockMvc.perform(put("/products/" + product.getCode())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(product)))
+                .andExpect(status().isOk());
+
+        assertThat(productService.findProductByCode(product.getCode()).getPrice()).isEqualTo(BigDecimal.TEN);
+    }
+
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldDeleteExistedProduct() throws Exception {
+        final Product product = easyRandomInstance().nextObject(Product.class);
+        productService.save(product);
+
+        mockMvc.perform(delete("/products/" + product.getCode()))
+                .andExpect(status().isOk());
+
+        assertThat(productService.findProductByCode(product.getCode())).isNull();
+    }
 
     @Test
     public void shouldFindAllProducts() throws Exception {

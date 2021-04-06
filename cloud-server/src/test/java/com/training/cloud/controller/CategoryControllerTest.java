@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.training.cloud.category.entity.Category;
 import com.training.cloud.category.service.CategoryService;
+import com.training.cloud.context.annatation.WithScope;
 import com.training.cloud.product.entity.Product;
 import com.training.cloud.product.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -37,34 +38,36 @@ public class CategoryControllerTest extends AbstractControllerTest {
     @Autowired
     private ProductService productService;
 
-//    @Test
-//    public void shouldCreateNewCategory() throws Exception {
-//        final Category category = easyRandomInstance().nextObject(Category.class);
-//
-//        mockMvc.perform(post("/categories")
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(asJsonString(category)))
-//                .andExpect(status().isCreated());
-//
-//        assertThat(categoryService.findByCode(category.getCode())).isNotNull();
-//    }
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldCreateNewCategory() throws Exception {
+        final Category category = easyRandomInstance().nextObject(Category.class);
 
-//    @Test
-//    public void shouldUpdateExistedCategory() throws Exception {
-//        final String name = "Test name";
-//        final Category category = easyRandomInstance().nextObject(Category.class);
-//        categoryService.save(category);
-//        category.setName(name);
-//
-//        mockMvc.perform(put("/categories/" + category.getCode())
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(asJsonString(category)))
-//                .andExpect(status().isOk());
-//
-//        assertThat(categoryService.findByCode(category.getCode()).getName()).isEqualTo(name);
-//    }
+        mockMvc.perform(post("/categories")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(category)))
+                .andExpect(status().isCreated());
+
+        assertThat(categoryService.findByCode(category.getCode())).isNotNull();
+    }
+
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldUpdateExistedCategory() throws Exception {
+        final String name = "Test name";
+        final Category category = easyRandomInstance().nextObject(Category.class);
+        categoryService.save(category);
+        category.setName(name);
+
+        mockMvc.perform(put("/categories/" + category.getCode())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(category)))
+                .andExpect(status().isOk());
+
+        assertThat(categoryService.findByCode(category.getCode()).getName()).isEqualTo(name);
+    }
 
     @Test
     public void shouldReturnProductsForCategory() throws Exception {
@@ -83,16 +86,17 @@ public class CategoryControllerTest extends AbstractControllerTest {
                 .contains(product.getCode());
     }
 
-//    @Test
-//    public void shouldDeleteExistedCategory() throws Exception {
-//        final Category category = easyRandomInstance().nextObject(Category.class);
-//        categoryService.save(category);
-//
-//        mockMvc.perform(delete("/categories/" + category.getCode()))
-//                .andExpect(status().isOk());
-//
-//        assertThat(categoryService.findByCode(category.getCode())).isNull();
-//    }
+    @Test
+    @WithScope("SCOPE_User.Write")
+    public void shouldDeleteExistedCategory() throws Exception {
+        final Category category = easyRandomInstance().nextObject(Category.class);
+        categoryService.save(category);
+
+        mockMvc.perform(delete("/categories/" + category.getCode()))
+                .andExpect(status().isOk());
+
+        assertThat(categoryService.findByCode(category.getCode())).isNull();
+    }
 
     @Test
     public void shouldFindAllCategories() throws Exception {

@@ -1,0 +1,56 @@
+<h1>Products</h1>
+<input type="button" value="Add" class="btn btn-default" (click)="addProduct()" />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Price</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of products">
+            <ng-template [ngTemplateOutlet]="loadTemplate(product)" 
+                        [ngTemplateOutletContext]="{ $implicit: product}">
+            </ng-template>
+        </tr>
+    </tbody>
+</table>
+<!-- <div>{{statusMessage}}</div> -->
+    
+<ng-template #readOnlyTemplate let-product>
+    <td>{{product.code}}</td>
+    <td>{{product.name}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.price}}</td>
+    <td>
+        <input type="button" value="Update" class="btn btn-default" (click)="editProduct(product)" />
+    </td>
+    <td>
+        <input type="button" value="Remove" (click)="deleteProduct(product)" class="btn btn-danger" />
+    </td>
+</ng-template>
+   
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedProduct.code" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedProduct.name" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedProduct.description" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedProduct.price" class="form-control" />
+    </td>
+    <td>
+        <input type="button" value="Save" (click)="saveProduct()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Cancel" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>

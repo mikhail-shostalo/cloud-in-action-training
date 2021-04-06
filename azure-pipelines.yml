@@ -13,21 +13,18 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-#    - task: AzureMysqlDeployment@1
-#      displayName: 'Execute Azure MySQL : InlineSqlTask'
-#      inputs:
-#        ConnectedServiceName: $(azureSubscriptionEndpoint)
-#        ServerName: $(ServerName)
-#        DatabaseName: $(DataBaseName)
-#        SqlUsername: $(SqlUserName)
-#        SqlPassword: $(SqlPassword)
-#        TaskNameSelector: InlineSqlTask
-#        SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
+   - task: AzureMysqlDeployment@1
+     displayName: 'Execute Azure MySQL : InlineSqlTask'
+     inputs:
+       ConnectedServiceName: $(azureSubscriptionEndpoint)
+       ServerName: $(ServerName)
+       DatabaseName: $(DataBaseName)
+       SqlUsername: $(SqlUserName)
+       SqlPassword: $(SqlPassword)
+       TaskNameSelector: InlineSqlTask
+       SqlInline: CREATE DATABASE IF NOT EXISTS testDb;
     - task: Gradle@2
-#      env:
-#        SPRING_DATASOURCE_URL: $(connectionDataBaseString)
-#        SPRING_DATASOURCE_USERNAME: $(SqlUserName)
-#        SPRING_DATASOURCE_PASSWORD: $(SqlPassword)
+      displayName: Build and test cloud-server
       inputs:
         cwd: 'cloud-server'
         gradleWrapperFile: 'cloud-server/gradlew'
@@ -38,32 +35,49 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build test'
-
-    - task: DockerCompose@0
-      displayName: Build services
+    
+    - task: Gradle@2
+      displayName: Build and test machine-client
       inputs:
-        action: Build services
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: docker-compose.yml
-        additionalImageTags: $(Build.SourceVersion)
-#        dockerComposeFileArgs: |
-#          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-#          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-#          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
+        cwd: 'machine-to-machine-client'
+        gradleWrapperFile: 'machine-to-machine-client/gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'build'
 
-    - task: DockerCompose@0
-      displayName: Push services
+    - task: Docker@2
+      displayName: Build and push an image to container registry for cloud-server
       inputs:
-        action: Push services
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: docker-compose.yml
-        additionalImageTags: $(Build.SourceVersion)
-#        dockerComposeFileArgs: |
-#          SPRING_DATASOURCE_URL=$(connectionDataBaseString)
-#          SPRING_DATASOURCE_USERNAME=$(SqlUserName)
-#          SPRING_DATASOURCE_PASSWORD=$(SqlPassword)
+        command: buildAndPush
+        containerRegistry: $(azureContainerRegistry)
+        repository: $(cloudServerRepository)
+        dockerfile: 'cloud-server/Dockerfile'
+        tags: |
+          $(Build.SourceVersion)
+    
+    - task: Docker@2
+      displayName: Build and push an image to container registry for machine-client
+      inputs:
+        command: buildAndPush
+        containerRegistry: $(azureContainerRegistry)
+        repository: $(machineClientRepository)
+        dockerfile: 'machine-to-machine-client/Dockerfile'
+        tags: |
+          $(Build.SourceVersion)
+    
+    - task: Docker@2
+      displayName: Build and push an image to container registry for web-app-client
+      inputs:
+        command: buildAndPush
+        containerRegistry: $(azureContainerRegistry)
+        repository: $(webappClientRepository)
+        dockerfile: 'webapp-client/Dockerfile'
+        tags: |
+          $(Build.SourceVersion)
 
 - stage: Deploy
   jobs:
@@ -74,6 +88,20 @@ stages:
     - task: AzureWebAppContainer@1
       displayName: Azure Web App on Container Deploy
       inputs:
-        appName: $(WebAppName)
+        appName: $(cloudServerApp)
         azureSubscription: $(azureSubscriptionEndpoint)
-        imageName: $(azureContainerRegistry)/$(DockerRepository):$(Build.SourceVersion)
+        imageName: $(azureContainerRegistry)/$(cloudServerRepository):$(Build.SourceVersion)
+    
+    - task: AzureWebAppContainer@1
+      displayName: Azure Web App on Container Deploy
+      inputs:
+        appName: $(machineClientApp)
+        azureSubscription: $(azureSubscriptionEndpoint)
+        imageName: $(azureContainerRegistry)/$(machineClientRepository):$(Build.SourceVersion)
+    
+    - task: AzureWebAppContainer@1
+      displayName: Azure Web App on Container Deploy
+      inputs:
+        appName: $(webAppClient)
+        azureSubscription: $(azureSubscriptionEndpoint)
+        imageName: $(azureContainerRegistry)/$(webappClientRepository):$(Build.SourceVersion)
