@@ -50,16 +50,10 @@ stages:
         tasks: 'build'
 
     - task: Docker@2
-      displayName: Login to ACR
-      inputs:
-        command: login
-        containerRegistry: $(azureContainerRegistry)
-
-    - task: Docker@2
       displayName: Build and push an image to container registry for cloud-server
       inputs:
         command: buildAndPush
-        containerRegistry: $(azureContainerRegistry)
+        containerRegistry: $(azureContainerConnection)
         repository: $(cloudServerRepository)
         dockerfile: 'cloud-server/Dockerfile'
         tags: |
@@ -69,7 +63,7 @@ stages:
       displayName: Build and push an image to container registry for machine-client
       inputs:
         command: buildAndPush
-        containerRegistry: $(azureContainerRegistry)
+        containerRegistry: $(azureContainerConnection)
         repository: $(machineClientRepository)
         dockerfile: 'machine-to-machine-client/Dockerfile'
         tags: |
@@ -79,7 +73,7 @@ stages:
       displayName: Build and push an image to container registry for web-app-client
       inputs:
         command: buildAndPush
-        containerRegistry: $(azureContainerRegistry)
+        containerRegistry: $(azureContainerConnection)
         repository: $(webappClientRepository)
         dockerfile: 'webapp-client/Dockerfile'
         tags: |
